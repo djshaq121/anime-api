@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using WebApi;
+using WebApi.HealthCheck;
 using WebApi.Model;
 using WebApi.Repository;
 
@@ -11,6 +14,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<AnimeDbContext>();
 
 builder.Services.AddDbContext<AnimeDbContext>(options =>
 {
@@ -28,6 +33,28 @@ var app = builder.Build();
     app.UseSwaggerUI();
 //}
 
+app.UseHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = async (context, report) =>
+    {
+        context.Response.ContentType = "application/json";
+
+        var response = new HealthCheckResponse
+        {
+            Status = report.Status.ToString(),
+            HealthChecks = report.Entries.Select(x => new HealthCheck
+            {
+                Component = x.Key,
+                Status = x.Value.Status.ToString(),
+                Description = x.Value.Description
+            }),
+
+            Duraction = report.TotalDuration
+        };
+
+        await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
+    }
+});
 if (app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
