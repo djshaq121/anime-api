@@ -25,7 +25,6 @@ jobs:
       with:
         fetch-depth: 0
   
-  
     - name: Application Version
       id: version
       uses: paulhatch/semantic-version@v5.0.2
