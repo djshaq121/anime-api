@@ -1,4 +1,4 @@
-# This is a basic workflow that is manually triggered
+# This is a basic workflow that is manually triggered.
 
 name: Version workflow
 
@@ -25,8 +25,8 @@ jobs:
     - name: Application Version
       id: version
       uses: paulhatch/semantic-version@v5.0.2
-      with:
-        bump_each_commit: true
+      #with:
+      #  bump_each_commit: true
 
     - name: echo new tag
       run: |
