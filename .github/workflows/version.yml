@@ -2,15 +2,12 @@
 
 name: Version workflow
 
-# Controls when the action will run. Workflow runs when manually triggered using the UI
-# or API.
-
 on: 
   workflow_dispatch:
   push:
     branches: ['**']
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel.
 jobs:
   # This workflow contains a single job called "greet"
   test:
@@ -19,7 +16,7 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Runs a single command using the runners shell
+
     - name: Checkout
       uses: actions/checkout@v2
       with:
@@ -28,6 +25,8 @@ jobs:
     - name: Application Version
       id: version
       uses: paulhatch/semantic-version@v5.0.2
+      with:
+        bump_each_commit: true
 
     - name: echo new tag
       run: |
