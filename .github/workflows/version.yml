@@ -33,7 +33,7 @@ jobs:
         
     - name: Tag Commit
       env:
-          TAG_NAME: $v{{ steps.version.outputs.version }}
+          TAG_NAME: v${{ steps.version.outputs.version }}
       run: |
         git config --local user.name "GitHub Action"
         git tag $TAG_NAME ${{ github.sha }}
