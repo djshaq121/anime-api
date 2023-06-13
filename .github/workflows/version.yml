@@ -30,3 +30,11 @@ jobs:
     - name: echo new tag
       run: |
         echo "The next tag version will be: ${{ steps.version.outputs.version }}"
+        
+    - name: Tag Commit
+      env:
+          TAG_NAME: ${{ github.event.inputs.tag_name }}
+          run: |
+            git config --local user.name "GitHub Action"
+            git tag $TAG_NAME ${{ github.sha }}
+            git push origin $TAG_NAME
