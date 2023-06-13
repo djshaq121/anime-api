@@ -1,5 +1,4 @@
 # This is a basic workflow that is manually triggered.
-
 name: Version workflow
 
 on: 
@@ -9,7 +8,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel.
 jobs:
-  # This workflow contains a single job called "greet"
+  # This workflow contains a single job called "test"
   test:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -31,3 +30,11 @@ jobs:
     - name: echo new tag
       run: |
         echo "The next tag version will be: ${{ steps.version.outputs.version }}"
+        
+    - name: Tag Commit
+      env:
+          TAG_NAME: v${{ steps.version.outputs.version }}
+      run: |
+        git config --local user.name "GitHub Action"
+        git tag $TAG_NAME ${{ github.sha }}
+        git push origin $TAG_NAME
